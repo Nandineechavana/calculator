@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pink Red Calculator</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #ff4b5c, #ff88a9);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .calculator {
+      background-color: #fff0f5;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(255, 0, 80, 0.3);
+      width: 300px;
+    }
+    .display {
+      background: #ffe6eb;
+      padding: 15px;
+      font-size: 24px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      text-align: right;
+      color: #ff1e56;
+    }
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    button {
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff4b5c;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background-color: #ff1e56;
+    }
+    .operator {
+      background-color: #ff88a9;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+      <button onclick="append('7')">7</button>
+      <button onclick="append('8')">8</button>
+      <button onclick="append('9')">9</button>
+      <button class="operator" onclick="setOperation('/')">÷</button>
+      
+      <button onclick="append('4')">4</button>
+      <button onclick="append('5')">5</button>
+      <button onclick="append('6')">6</button>
+      <button class="operator" onclick="setOperation('*')">×</button>
+      
+      <button onclick="append('1')">1</button>
+      <button onclick="append('2')">2</button>
+      <button onclick="append('3')">3</button>
+      <button class="operator" onclick="setOperation('-')">−</button>
+      
+      <button onclick="append('0')">0</button>
+      <button onclick="clearDisplay()">C</button>
+      <button onclick="calculate()">=</button>
+      <button class="operator" onclick="setOperation('+')">+</button>
+      
+      <button onclick="setOperation('%')">%</button>
+      <button onclick="square()">x²</button>
+      <button onclick="squareRoot()">√</button>
+      <button onclick="power()">xʸ</button>
+      
+      <button onclick="reciprocal()">1/x</button>
+      <button onclick="negate()">+/-</button>
+    </div>
+  </div>
+
+  <script>
+    let display = document.getElementById('display');
+    let current = '';
+    let operator = '';
+    let operand = '';
+
+    function append(number) {
+      if (display.innerText === '0' || display.innerText === 'Error') {
+        display.innerText = number;
+      } else {
+        display.innerText += number;
+      }
+      current += number;
+    }
+
+    function clearDisplay() {
+      display.innerText = '0';
+      current = '';
+      operator = '';
+      operand = '';
+    }
+
+    function setOperation(op) {
+      if (current === '') return;
+      operator = op;
+      operand = current;
+      current = '';
+      display.innerText += ' ' + op + ' ';
+    }
+
+    function calculate() {
+      try {
+        let expression = display.innerText.replace(/×/g, '*').replace(/÷/g, '/').replace(/\^/g, '**');
+        let result = eval(expression);
+        display.innerText = result;
+        current = result;
+
+        // Display result in console and alert box
+        console.log("Result: " + result);
+        alert("Result: " + result);
+
+      } catch {
+        display.innerText = 'Error';
+        alert("Error in calculation!");
+        current = '';
+      }
+    }
+
+    function square() {
+      if (current === '') return;
+      let result = Math.pow(parseFloat(current), 2);
+      display.innerText = result;
+      current = result;
+      console.log("Square Result: " + result);
+      alert("Square Result: " + result);
+    }
+
+    function squareRoot() {
+      if (current === '') return;
+      let result = Math.sqrt(parseFloat(current));
+      display.innerText = result;
+      current = result;
+      console.log("Square Root Result: " + result);
+      alert("Square Root Result: " + result);
+    }
+
+    function power() {
+      if (current === '') return;
+      operand = current;
+      operator = '**';
+      display.innerText += ' ^ ';
+      current = '';
+    }
+
+    function reciprocal() {
+      if (current === '' || parseFloat(current) === 0) {
+        display.innerText = 'Error';
+        alert("Error: Division by zero!");
+        current = '';
+        return;
+      }
+      let result = 1 / parseFloat(current);
+      display.innerText = result;
+      current = result;
+      console.log("Reciprocal Result: " + result);
+      alert("Reciprocal Result: " + result);
+    }
+
+    function negate() {
+      if (current === '') return;
+      let result = -parseFloat(current);
+      display.innerText = result;
+      current = result;
+      console.log("Negate Result: " + result);
+      alert("Negate Result: " + result);
+    }
+  </script>
+</body>
+</html>
